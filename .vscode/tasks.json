@@ -1,0 +1,19 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Setup (create venv + install)",
+      "type": "shell",
+      "command": "python -m venv .venv && .venv/bin/pip install -r requirements.txt",
+      "windows": { "command": "python -m venv .venv; .venv\\Scripts\\pip install -r requirements.txt" }
+    },
+    {
+      "label": "Run Life OS",
+      "type": "shell",
+      "command": ".venv/bin/python -m uvicorn main:app --reload --port 8000",
+      "windows": { "command": ".venv\\Scripts\\python -m uvicorn main:app --reload --port 8000" },
+      "problemMatcher": [],
+      "isBackground": true
+    }
+  ]
+}

@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Life OS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root {
+  --bg: #eef3ff;
+  --bg-strong: #e3ecff;
+  --card: rgba(255,255,255,0.76);
+  --card-strong: #ffffff;
+  --tx: #111827;
+  --muted: #667085;
+  --border: rgba(110,130,190,0.18);
+  --shadow: 0 24px 60px rgba(32,53,112,0.12);
+  --accent: #5b68ff;
+  --accent-2: #19c7b5;
+  --accent-3: #ff7a7a;
+  --warm: #ffb24d;
+  --green: #2fc18d;
+  --slate: #4b5563;
+  --danger: #ef546b;
+  --radius: 22px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b1020;
+    --bg-strong: #111a2d;
+    --card: rgba(18,24,42,0.82);
+    --card-strong: #121b2d;
+    --tx: #edf4ff;
+    --muted: #9aa7c2;
+    --border: rgba(120,142,204,0.22);
+    --shadow: 0 24px 60px rgba(0,0,0,0.34);
+    --accent: #7d85ff;
+    --accent-2: #2cc7c0;
+    --accent-3: #ff7d82;
+    --warm: #ffb558;
+    --green: #3ccf9d;
+    --slate: #d4d9ee;
+    --danger: #ff7d95;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0b1020;
+  --bg-strong: #111a2d;
+  --card: rgba(18,24,42,0.82);
+  --card-strong: #121b2d;
+  --tx: #edf4ff;
+  --muted: #9aa7c2;
+  --border: rgba(120,142,204,0.22);
+  --shadow: 0 24px 60px rgba(0,0,0,0.34);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(91,104,255,0.12), transparent 25%),
+    radial-gradient(circle at bottom right, rgba(25,199,181,0.12), transparent 30%),
+    var(--bg);
+  color: var(--tx);
+  font: 15px/1.5 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+button, input, textarea {
+  font: inherit;
+}
+button { cursor: pointer; }
+.wrap {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 16px 16px 120px;
+}
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 8px auto 18px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 14px 30px rgba(91,104,255,0.35);
+  position: relative;
+}
+.brand-mark::after {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border-radius: 9px;
+  background: rgba(255,255,255,0.28);
+}
+.theme-toggle {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.34);
+  color: var(--tx);
+  backdrop-filter: blur(10px);
+}
+.app-shell {
+  display: grid;
+  gap: 18px;
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 42px rgba(32,53,112,0.12);
+}
+.hero {
+  padding: 24px 22px 20px;
+  background: linear-gradient(135deg, rgba(91,104,255,0.94), rgba(25,199,181,0.90));
+  border: 0;
+  color: white;
+  overflow: hidden;
+  position: relative;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: auto -20% -35% auto;
+  width: 220px;
+  height: 220px;
+  background: rgba(255,255,255,0.14);
+  border-radius: 50%;
+}
+.hero-inner {
+  position: relative;
+  z-index: 1;
+}
+.hero h2 {
+  margin: 0 0 6px;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  letter-spacing: -0.06em;
+  line-height: 1.05;
+}
+.hero p {
+  margin: 0;
+  color: rgba(255,255,255,0.86);
+  max-width: 64ch;
+}
+.pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 999px;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  font-weight: 700;
+}
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 14px;
+}
+.metric {
+  padding: 18px 16px;
+}
+.metric .value {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-weight: 800;
+  font-size: clamp(1.7rem, 3vw, 2.2rem);
+  letter-spacing: -0.05em;
+  margin-bottom: 4px;
+}
+.metric .label {
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.metric .badge {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green);
+  background: rgba(47,193,141,0.12);
+  border-radius: 999px;
+  padding: 5px 8px;
+}
+.layout {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 18px;
+  align-items: start;
+}
+.section {
+  padding: 18px 18px 12px;
+}
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.section-head h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  letter-spacing: -0.03em;
+}
+.counter {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.plan-card {
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.18);
+  margin-bottom: 12px;
+}
+.plan-card.active {
+  border-color: rgba(91,104,255,0.4);
+  background: linear-gradient(180deg, rgba(91,104,255,0.08), rgba(25,199,181,0.05));
+}
+.plan-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+.plan-top h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  letter-spacing: -0.03em;
+}
+.plan-summary {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.badge.high { background: rgba(239,84,107,0.12); color: var(--danger); }
+.badge.medium { background: rgba(255,178,77,0.14); color: #d77a00; }
+.badge.low { background: rgba(47,193,141,0.12); color: var(--green); }
+.badge.category {
+  background: rgba(91,104,255,0.12);
+  color: var(--accent);
+}
+.progress-bar {
+  width: 100%;
+  height: 9px;
+  background: rgba(148,163,184,0.18);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 12px 0 10px;
+}
+.progress-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  transition: width 0.25s ease;
+}
+.task-list {
+  display: grid;
+  gap: 10px;
+}
+.task-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+}
+.task-item:first-child {
+  border-top: 0;
+}
+.check {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  border: 1.5px solid rgba(148,163,184,0.8);
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 12px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.task-item.done .check {
+  background: linear-gradient(135deg, var(--green), var(--accent-2));
+  border-color: transparent;
+}
+.task-main {
+  flex: 1;
+  min-width: 0;
+}
+.task-main .title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+.task-main .title b {
+  font-size: 0.96rem;
+  letter-spacing: -0.02em;
+}
+.task-item.done .title b {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+.meta {
+  font-size: 12px;
+  color: var(--muted);
+}
+.inline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+.action, .ghost {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 9px 12px;
+  background: rgba(255,255,255,0.15);
+  color: var(--tx);
+  font-weight: 700;
+}
+.action {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: white;
+  border-color: transparent;
+}
+.side-stack {
+  display: grid;
+  gap: 18px;
+}
+.focus-card {
+  padding: 18px;
+}
+.focus-card h4 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+  letter-spacing: -0.03em;
+}
+.focus-card p {
+  margin: 0;
+  color: var(--muted);
+}
+.priority {
+  margin-top: 18px;
+  display: grid;
+  gap: 10px;
+}
+.priority-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(148,163,184,0.06);
+}
+.priority-item b {
+  font-size: 0.92rem;
+}
+.chat-screen, .solve-screen {
+  padding: 18px;
+}
+.solve-screen textarea, .chat-box input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(148,163,184,0.04);
+  color: var(--tx);
+  padding: 14px 16px;
+  font: inherit;
+  resize: vertical;
+}
+.solve-screen textarea {
+  min-height: 130px;
+  margin-top: 12px;
+}
+.primary-btn {
+  margin-top: 12px;
+  width: 100%;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: white;
+  font-weight: 800;
+  padding: 13px 18px;
+}
+.primary-btn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+.prompt-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.prompt-chip {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(91,104,255,0.08);
+  color: var(--accent);
+  border: 1px solid rgba(91,104,255,0.12);
+  font-weight: 700;
+  font-size: 12px;
+}
+.microphone {
+  width: 96px;
+  height: 96px;
+  border: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: white;
+  font-size: 30px;
+  box-shadow: 0 18px 38px rgba(91,104,255,0.26);
+  margin: 0 auto 10px;
+  display: block;
+}
+.microphone.rec {
+  background: linear-gradient(135deg, var(--danger), #ff8d4d);
+  animation: pulse 1.25s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(239,84,107,0.45); }
+  100% { box-shadow: 0 0 0 26px rgba(239,84,107,0); }
+}
+.status-text {
+  min-height: 20px;
+  margin-top: 8px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 12px;
+}
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.live-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 6px rgba(47,193,141,0.12);
+  display: inline-block;
+}
+.chat-thread {
+  max-height: 40vh;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 8px 4px;
+}
+.chat-bubble {
+  max-width: 86%;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(148,163,184,0.05);
+}
+.chat-bubble.user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: white;
+  border-color: transparent;
+}
+.chat-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+.chat-row .icon-btn {
+  width: 52px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: white;
+  font-size: 22px;
+}
+.chat-row .icon-btn.rec {
+  background: linear-gradient(135deg, var(--danger), #ff8c4c);
+}
+.chat-row input {
+  flex: 1;
+  min-width: 0;
+}
+.chat-row .send-btn {
+  border: 0;
+  border-radius: 14px;
+  background: var(--card-strong);
+  color: var(--tx);
+  border: 1px solid var(--border);
+  font-weight: 700;
+  padding: 0 16px;
+}
+.empty-state {
+  padding: 28px 18px;
+  text-align: center;
+  color: var(--muted);
+}
+.empty-state h3 {
+  margin: 0 0 8px;
+  color: var(--tx);
+}
+nav {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.74);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+  z-index: 10;
+}
+nav button {
+  border: 0;
+  background: transparent;
+  border-radius: 12px;
+  min-width: 110px;
+  padding: 10px 14px;
+  color: var(--muted);
+  font-weight: 700;
+}
+nav button.on {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: white;
+}
+#toast {
+  position: fixed;
+  left: 50%;
+  top: calc(12px + var(--safe-top));
+  transform: translateX(-50%);
+  background: rgba(17,24,39,0.92);
+  color: white;
+  border-radius: 14px;
+  padding: 10px 14px;
+  box-shadow: var(--shadow);
+  z-index: 100;
+  display: none;
+}
+.hidden { display: none !important; }
+@media (max-width: 760px) {
+  .metrics { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .layout { grid-template-columns: 1fr; }
+  nav { width: calc(100% - 20px); justify-content: center; }
+  nav button { flex: 1; min-width: 0; }
+  .brand { font-size: 1.5rem; }
+}
+</style>
+</head>
+<body>
+<div id="toast"></div>
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark"></span>Life OS</div>
+    <button class="theme-toggle" id="theme" aria-label="Toggle theme">🌙</button>
+  </header>
+  <main id="v" class="app-shell"></main>
+</div>
+<nav>
+  <button class="on" data-t="dash">Dashboard</button>
+  <button data-t="solve">Solve</button>
+  <button data-t="chat">Coach</button>
+</nav>
+<script>
+const $ = (s) => document.querySelector(s);
+let S = { problems: [], active: null, chat: {} }, tab = 'dash', sample = null, rec = null;
+try {
+  S = Object.assign(S, JSON.parse(localStorage.getItem('lifeos') || '{}'));
+} catch (e) {}
+let st;
+const save = () => {
+  try { localStorage.setItem('lifeos', JSON.stringify(S)); } catch (e) {}
+  clearTimeout(st);
+  st = setTimeout(() => {
+    fetch('/api/state', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ problems: S.problems, chat: S.chat }) }).catch(() => {});
+  }, 350);
+};
+const esc = (value) => String(value ?? '').replace(/[&<>\"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', '\\': '&#92;' }[c]));
+const uid = () => Math.random().toString(36).slice(2, 9);
+
+function setTheme(t) {
+  document.documentElement.dataset.theme = t;
+  $('#theme').textContent = t === 'dark' ? '☀️' : '🌙';
+  try { localStorage.setItem('lifeos-theme', t); } catch (e) {}
+}
+let th = '';
+try { th = localStorage.getItem('lifeos-theme'); } catch (e) {}
+setTheme(th || (matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light'));
+$('#theme').onclick = () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+
+(async () => {
+  try {
+    const s = await (await fetch('/api/state')).json();
+    if (s.problems && (s.problems.length || !S.problems.length)) {
+      S.problems = s.problems;
+      S.chat = s.chat || S.chat;
+    } else {
+      save();
+    }
+    sample = true;
+  } catch (e) {
+    sample = false;
+  }
+  render();
+})();
+
+const SCHEMA = 'Return ONLY JSON: {"title":"short title","summary":"one sentence","category":"Health|Money|Work|Home|Study|Relationships|Other","tasks":[{"text":"concrete action","priority":"high|medium|low","hours":number hours from now until due}]}. 4-8 tasks, ordered, small and doable.';
+
+function fallback(txt) {
+  const parts = txt.split(/[.!?\n]+| and | but /i).map((s) => s.trim()).filter((s) => s.length > 8).slice(0, 5);
+  const base = parts.length ? parts : [txt];
+  const tasks = [{ text: 'Write down exactly what the problem is and what success looks like', priority: 'high', hours: 1 }, ...base.map((p, i) => ({ text: 'Take one small step on: ' + p, priority: i < 2 ? 'high' : 'medium', hours: (i + 1) * 24 })), { text: 'Review progress and adjust the plan', priority: 'low', hours: 24 * 7 }];
+  return { title: txt.slice(0, 40) + (txt.length > 40 ? '…' : ''), summary: 'A starter plan for a calmer next step.', category: 'Other', tasks };
+}
+
+async function solve(txt) {
+  let r;
+  if (sample) {
+    try {
+      const q = await fetch('/api/plan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: txt })
+      });
+      r = q.ok ? await q.json() : null;
+    } catch (e) {
+      r = null;
+    }
+  }
+  r = r && r.tasks ? r : fallback(txt);
+  const p = {
+    id: uid(),
+    title: r.title,
+    summary: r.summary,
+    category: r.category || 'Other',
+    created: Date.now(),
+    tasks: r.tasks.map((t) => ({
+      id: uid(),
+      text: t.text,
+      priority: ['high', 'medium', 'low'].includes(t.priority) ? t.priority : 'medium',
+      due: Date.now() + (+t.hours || 24) * 36e5,
+      done: false,
+      notified: false
+    }))
+  };
+  S.problems.unshift(p);
+  S.active = p.id;
+  save();
+  return p;
+}
+
+function addTaskToPlan(planId, text, priority = 'medium', hours = 24) {
+  const problem = S.problems.find((x) => x.id === planId);
+  if (!problem) {
+    toast('Choose a plan first.');
+    return;
+  }
+  const value = String(text || '').trim();
+  if (!value) {
+    toast('Write a task before saving it.');
+    return;
+  }
+  problem.tasks.push({
+    id: uid(),
+    text: value,
+    priority: ['high', 'medium', 'low'].includes(priority) ? priority : 'medium',
+    due: Date.now() + (Number(hours) || 24) * 36e5,
+    done: false,
+    notified: false
+  });
+  save();
+  render();
+  toast('✅ Added new task');
+}
+
+function exportPlan(planId) {
+  const problem = S.problems.find((x) => x.id === planId) || S.problems[0];
+  if (!problem) {
+    toast('No plan to export yet.');
+    return;
+  }
+  const blob = new Blob([JSON.stringify(problem, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'lifeos-' + (problem.title || 'plan').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('📦 Plan exported');
+}
+
+function allTasks() {
+  return S.problems.flatMap((p) => p.tasks || []);
+}
+
+function pct(p) {
+  return p.tasks && p.tasks.length ? Math.round(p.tasks.filter((t) => t.done).length / p.tasks.length * 100) : 0;
+}
+
+function fmt(ts) {
+  const d = ts - Date.now();
+  if (d < 0) return 'Overdue';
+  const h = d / 36e5;
+  if (h < 1) return 'in ' + Math.max(1, Math.round(h * 60)) + ' min';
+  if (h < 24) return 'in ' + Math.round(h) + ' h';
+  return 'in ' + Math.round(h / 24) + ' d';
+}
+
+function makeMetric(label, value, extra = '') {
+  return `
+    <div class="card metric">
+      <div class="value">${value}${extra ? `<span class="badge">${extra}</span>` : ''}</div>
+      <div class="label">${label}</div>
+    </div>
+  `;
+}
+
+function dash() {
+  const tasks = allTasks();
+  const done = tasks.filter((t) => t.done).length;
+  const overdue = tasks.filter((t) => !t.done && t.due < Date.now()).length;
+  const next = tasks.filter((t) => !t.done).sort((x, y) => ({ high: 0, medium: 1, low: 2 }[x.priority] - { high: 0, medium: 1, low: 2 }[y.priority]) || x.due - y.due)[0];
+  const openPlan = S.problems.find((p) => p.id === S.active) || S.problems[0];
+
+  let html = `
+    <section class="card hero">
+      <div class="hero-inner">
+        <h2>${S.problems.length ? 'Your focus, clearly mapped.' : 'Welcome to Life OS'}</h2>
+        <p>${next ? 'Next move: ' + esc(next.text) : 'Tell me a problem and I will turn it into a plan you can act on.'}</p>
+        <div class="pill-row">
+          <span class="pill">✨ ${S.problems.length} plans</span>
+          <span class="pill">📌 ${tasks.length} tasks</span>
+          <span class="pill">🎯 ${tasks.length ? Math.round(done / tasks.length * 100) : 0}% done</span>
+        </div>
+      </div>
+    </section>
+    <section class="metrics">
+      ${makeMetric('Plans', S.problems.length)}
+      ${makeMetric('Done', `${done}/${tasks.length || 0}`, tasks.length ? Math.round(done / tasks.length * 100) + '%' : '')}
+      ${makeMetric('Overdue', overdue, overdue ? 'watch' : 'calm')}
+      ${makeMetric('Next', next ? next.priority : 'none', next ? 'priority' : '')}
+    </section>
+    <section class="layout">
+      <div class="card section">
+        <div class="section-head">
+          <h3>Plans</h3>
+          <span class="counter">${S.problems.length} active</span>
+        </div>
+        ${!S.problems.length ? `<div class="empty-state"><h3>No plans yet</h3><p>Start with one real problem and turn it into a clear action plan.</p><button class="action" data-go="solve" style="margin-top:12px">Create a plan</button></div>` : S.problems.map((p) => {
+          const selected = openPlan && openPlan.id === p.id;
+          const tasksForPlan = p.tasks || [];
+          const progress = pct(p);
+          const upcoming = tasksForPlan.filter((t) => !t.done).sort((a, b) => a.due - b.due).slice(0, 3);
+          return `
+            <article class="plan-card ${selected ? 'active' : ''}">
+              <div class="plan-top">
+                <div>
+                  <h4>${esc(p.title)}</h4>
+                  <p class="plan-summary">${esc(p.category)} · ${esc(p.summary)}</p>
+                </div>
+                <span class="badge category">${progress}%</span>
+              </div>
+              <div class="progress-bar"><span style="width:${progress}%"></span></div>
+              <div class="task-list">
+                ${(tasksForPlan.slice().sort((x, y) => x.done - y.done).slice(0, 3)).map((t) => `
+                  <div class="task-item ${t.done ? 'done' : ''}">
+                    <button class="check" data-ck="${p.id}|${t.id}">${t.done ? '✓' : ''}</button>
+                    <div class="task-main">
+                      <div class="title">
+                        <b>${esc(t.text)}</b>
+                        <span class="badge ${t.priority}">${t.priority}</span>
+                      </div>
+                      <div class="meta">${t.done ? 'completed' : fmt(t.due)}</div>
+                    </div>
+                  </div>
+                `).join('') || '<div class="meta">No tasks yet.</div>'}
+              </div>
+              <div class="inline-actions">
+                <button class="action" data-open="${p.id}">${selected ? 'Hide details' : 'Open plan'}</button>
+                <button class="ghost" data-task-add="${p.id}">+ Task</button>
+                <button class="ghost" data-export="${p.id}">Export</button>
+              </div>
+              ${selected ? `
+                <div class="inline-actions" style="margin-top:10px">
+                  <button class="ghost" data-del="${p.id}">Delete</button>
+                </div>
+              ` : ''}
+              ${selected && upcoming.length ? `<div class="meta" style="margin-top:10px;">Next up: ${upcoming.map((t) => esc(t.text)).join(' • ')}</div>` : ''}
+            </article>
+          `;
+        }).join('')}
+      </div>
+      <aside class="side-stack">
+        <div class="card focus-card">
+          <h4>Focus today</h4>
+          <p>${next ? esc(next.text) : 'No active tasks. Pick a problem and create a plan.'}</p>
+          <div class="priority">
+            <div class="priority-item"><b>High</b><span class="badge high">${tasks.filter((t) => t.priority === 'high' && !t.done).length}</span></div>
+            <div class="priority-item"><b>Medium</b><span class="badge medium">${tasks.filter((t) => t.priority === 'medium' && !t.done).length}</span></div>
+            <div class="priority-item"><b>Low</b><span class="badge low">${tasks.filter((t) => t.priority === 'low' && !t.done).length}</span></div>
+          </div>
+        </div>
+        <div class="card focus-card">
+          <h4>Quick actions</h4>
+          <div class="inline-actions" style="margin-top:6px">
+            <button class="action" data-go="solve">New plan</button>
+            <button class="ghost" data-go="chat">Coach</button>
+          </div>
+        </div>
+      </aside>
+    </section>
+  `;
+  return html;
+}
+
+function solveV() {
+  return `
+    <section class="card solve-screen">
+      <h3 style="margin:0 0 8px; font-size:1.3rem; letter-spacing:-0.04em;">What needs attention?</h3>
+      <p class="meta" style="margin:0;">Talk, type, or use one of the quick prompts below.</p>
+      <button class="microphone" id="mic" aria-label="Voice input">🎙️</button>
+      <div class="status-text" id="ms"></div>
+      <textarea id="txt" placeholder="e.g. I’m behind on rent, my boss wants a report Friday, and I haven’t slept well..."></textarea>
+      <button class="primary-btn" id="go">Build my plan ✨</button>
+      <div class="prompt-chips">
+        ${['I keep procrastinating on my thesis','I want to save ₹50,000 in 6 months','My room is a mess and I feel stuck'].map((x) => `<button class="prompt-chip" data-ex="${esc(x)}">${esc(x)}</button>`).join('')}
+      </div>
+      <p class="meta" style="margin-top:12px; text-align:center;">${sample ? 'AI planning is online.' : 'Backend is offline — the basic fallback planner is active.'}</p>
+    </section>
+  `;
+}
+
+function msgsH(p) {
+  const c = S.chat[p.id] || [];
+  return c.length
+    ? c.map((m) => `<div class="chat-bubble ${m.r === 'u' ? 'user' : ''}">${esc(m.t)}</div>`).join('')
+    : '<div class="chat-bubble">Tap the mic and talk to your coach live, or type. Try: “I only have 30 minutes today” or “add a task to call the landlord”.</div>';
+}
+
+function chatV() {
+  const p = S.problems.find((x) => x.id === S.active);
+  if (!p) {
+    return `
+      <section class="card empty-state">
+        <h3>Create a plan first</h3>
+        <p>Once you have a plan, your coach can help you work through it.</p>
+        <button class="action" data-go="solve" style="margin-top:14px">Create a plan</button>
+      </section>
+    `;
+  }
+  return `
+    <section class="card chat-screen">
+      <div class="chat-header">
+        <div>
+          <h3 style="margin:0; font-size:1.15rem; letter-spacing:-0.04em;">Live coach · ${esc(p.title)}</h3>
+          <div class="meta">Gemini Live · <span class="live-dot" style="margin-right:6px"></span>${live ? 'listening' : 'ready'}</div>
+        </div>
+      </div>
+      <div class="chat-thread" id="msgs">${msgsH(p)}</div>
+      <div class="chat-row">
+        <button id="cm" class="icon-btn ${live ? 'rec' : ''}" aria-label="Talk live">🎙️</button>
+        <input id="ci" placeholder="Message your coach">
+        <button id="cs" class="send-btn">Send</button>
+      </div>
+    </section>
+  `;
+}
+
+function render() {
+  document.querySelectorAll('nav button').forEach((b) => b.classList.toggle('on', b.dataset.t === tab));
+  $('#v').innerHTML = tab === 'dash' ? dash() : tab === 'solve' ? solveV() : chatV();
+  bind();
+}
+
+function bind() {
+  document.querySelectorAll('nav button').forEach((b) => {
+    b.onclick = () => { tab = b.dataset.t; render(); };
+  });
+  document.querySelectorAll('[data-go]').forEach((b) => {
+    b.onclick = () => { tab = b.dataset.go; render(); };
+  });
+  document.querySelectorAll('[data-open]').forEach((b) => {
+    b.onclick = () => { S.active = S.active === b.dataset.open ? null : b.dataset.open; save(); render(); };
+  });
+  document.querySelectorAll('[data-ck]').forEach((b) => {
+    b.onclick = () => {
+      const [planId, taskId] = b.dataset.ck.split('|');
+      const plan = S.problems.find((x) => x.id === planId);
+      const task = plan && plan.tasks.find((x) => x.id === taskId);
+      if (!task) return;
+      task.done = !task.done;
+      save();
+      render();
+      if (plan.tasks.every((x) => x.done)) toast('🎉 Plan complete. Nice work!');
+    };
+  });
+  document.querySelectorAll('[data-task-add]').forEach((b) => {
+    b.onclick = () => {
+      const task = window.prompt('Add a task to this plan:', '');
+      if (task === null) return;
+      addTaskToPlan(b.dataset.taskAdd, task);
+    };
+  });
+  document.querySelectorAll('[data-export]').forEach((b) => {
+    b.onclick = () => exportPlan(b.dataset.export);
+  });
+  document.querySelectorAll('[data-del]').forEach((b) => {
+    b.onclick = () => {
+      const ok = window.confirm('Delete this plan?');
+      if (!ok) return;
+      S.problems = S.problems.filter((x) => x.id !== b.dataset.del);
+      if (S.active === b.dataset.del) S.active = null;
+      save();
+      render();
+    };
+  });
+  document.querySelectorAll('[data-ex]').forEach((b) => {
+    b.onclick = () => { $('#txt').value = b.dataset.ex; };
+  });
+
+  const go = $('#go');
+  if (go) {
+    go.onclick = async () => {
+      const v = $('#txt').value.trim();
+      if (!v) return;
+      go.disabled = true;
+      go.textContent = 'Building…';
+      await solve(v);
+      tab = 'dash';
+      render();
+      askNotif();
+      go.disabled = false;
+      go.textContent = 'Build my plan ✨';
+    };
+  }
+  const mic = $('#mic');
+  if (mic) mic.onclick = voice;
+
+  const cs = $('#cs');
+  if (cs) {
+    cs.onclick = chat;
+    $('#cm').onclick = toggleMic;
+    $('#ci').onkeydown = (e) => { if (e.key === 'Enter') chat(); };
+    const m = $('#msgs');
+    if (m) m.scrollTop = m.scrollHeight;
+  }
+}
+
+function voice() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    $('#ms').textContent = 'Voice input is not supported in this browser — please type.';
+    return;
+  }
+  if (rec) { rec.stop(); return; }
+  rec = new SR();
+  rec.interimResults = true;
+  rec.continuous = true;
+  rec.lang = navigator.language || 'en-US';
+  const base = $('#txt').value;
+  let fin = '';
+  $('#mic').classList.add('rec');
+  $('#ms').textContent = 'Listening… tap again to stop';
+  rec.onresult = (e) => {
+    let i = '';
+    for (let k = e.resultIndex; k < e.results.length; k++) {
+      const r = e.results[k];
+      if (r.isFinal) fin += r[0].transcript + ' ';
+      else i += r[0].transcript;
+    }
+    const t = $('#txt');
+    if (t) t.value = (base ? base + ' ' : '') + fin + i;
+  };
+  rec.onerror = (e) => {
+    const m = $('#ms');
+    if (m) m.textContent = 'Mic error: ' + e.error;
+  };
+  rec.onend = () => {
+    rec = null;
+    const m = $('#mic');
+    if (m) m.classList.remove('rec');
+    $('#ms').textContent = '';
+  };
+  try { rec.start(); } catch (e) { rec = null; }
+}
+
+let ws = null, actx = null, stream = null, proc = null, nextT = 0, live = false, srcs = [];
+const chatOf = () => { S.chat[S.active] = S.chat[S.active] || []; return S.chat[S.active]; };
+function paint() {
+  const m = $('#msgs');
+  const p = S.problems.find((x) => x.id === S.active);
+  if (m && p) {
+    m.innerHTML = msgsH(p);
+    m.scrollTop = m.scrollHeight;
+  }
+}
+function addT(role, text) {
+  const c = chatOf();
+  const r = role === 'user' ? 'u' : 'a';
+  const l = c[c.length - 1];
+  if (l && l.live && l.r === r) l.t += text;
+  else c.push({ r, t: text, live: true });
+  paint();
+}
+function connect() {
+  return new Promise((res, rej) => {
+    ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/ws/live');
+    ws.onopen = () => { ws.send(JSON.stringify({ type: 'start', active: S.active })); res(); };
+    ws.onerror = () => rej(new Error('ws'));
+    ws.onclose = () => { ws = null; stopMic(); if (tab === 'chat') render(); };
+    ws.onmessage = (e) => {
+      const m = JSON.parse(e.data);
+      if (m.type === 'audio') play(m.data);
+      else if (m.type === 'transcript') addT(m.role, m.text);
+      else if (m.type === 'interrupted') flush();
+      else if (m.type === 'turn_complete') { chatOf().forEach((x) => x.live = false); save(); }
+      else if (m.type === 'state') { S.problems = m.state.problems; save(); toast('✅ Coach updated your plan'); }
+      else if (m.type === 'error') toast(m.message);
+    };
+  });
+}
+async function ensure() {
+  if (!actx) actx = new AudioContext({ sampleRate: 16000 });
+  await actx.resume();
+  if (!ws || ws.readyState !== 1) await connect();
+}
+function play(b64) {
+  const bin = atob(b64);
+  const n = bin.length >> 1;
+  const u = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+  const dv = new DataView(u.buffer);
+  const ab = actx.createBuffer(1, n, 24000);
+  const d = ab.getChannelData(0);
+  for (let i = 0; i < n; i++) d[i] = dv.getInt16(i * 2, true) / 32768;
+  const s = actx.createBufferSource();
+  s.buffer = ab;
+  s.connect(actx.destination);
+  nextT = Math.max(nextT, actx.currentTime);
+  s.start(nextT);
+  nextT += ab.duration;
+  srcs.push(s);
+  s.onended = () => { srcs = srcs.filter((x) => x !== s); };
+}
+function flush() {
+  srcs.forEach((s) => { try { s.stop(); } catch (e) {} });
+  srcs = [];
+  nextT = 0;
+}
+async function startMic() {
+  stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+  const src = actx.createMediaStreamSource(stream);
+  proc = actx.createScriptProcessor(2048, 1, 1);
+  proc.onaudioprocess = (e) => {
+    if (!ws || ws.readyState !== 1) return;
+    const f = e.inputBuffer.getChannelData(0);
+    const b = new Int16Array(f.length);
+    for (let i = 0; i < f.length; i++) b[i] = Math.max(-1, Math.min(1, f[i])) * 32767;
+    ws.send(JSON.stringify({ type: 'audio', rate: Math.round(actx.sampleRate), data: btoa(String.fromCharCode(...new Uint8Array(b.buffer))) }));
+  };
+  src.connect(proc);
+  proc.connect(actx.destination);
+}
+function stopMic() {
+  try { proc && proc.disconnect(); } catch (e) {}
+  stream && stream.getTracks().forEach((t) => t.stop());
+  proc = null;
+  stream = null;
+  live = false;
+}
+async function toggleMic() {
+  if (live) {
+    stopMic();
+    ws && ws.readyState === 1 && ws.send(JSON.stringify({ type: 'audio_end' }));
+  } else {
+    try {
+      await ensure();
+      await startMic();
+      live = true;
+    } catch (e) {
+      toast('Could not start live voice. Is the Python server running and the mic allowed?');
+    }
+  }
+  render();
+}
+async function chat() {
+  const i = $('#ci');
+  const v = i.value.trim();
+  if (!v) return;
+  try { await ensure(); } catch (e) { toast('Backend not reachable. Start the Python server.'); return; }
+  chatOf().push({ r: 'u', t: v });
+  i.value = '';
+  ws.send(JSON.stringify({ type: 'text', text: v }));
+  save();
+  paint();
+}
+function toast(t) {
+  const e = $('#toast');
+  e.textContent = t;
+  e.style.display = 'block';
+  clearTimeout(toast.h);
+  toast.h = setTimeout(() => e.style.display = 'none', 5000);
+}
+function askNotif() {
+  try {
+    if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
+  } catch (e) {}
+}
+setInterval(() => {
+  let ch = false;
+  S.problems.forEach((p) => {
+    p.tasks.forEach((t) => {
+      if (!t.done && !t.notified && t.due <= Date.now()) {
+        t.notified = true;
+        ch = true;
+        toast('⏰ Due: ' + t.text);
+        try {
+          if (Notification.permission === 'granted') new Notification('Life OS', { body: t.text });
+        } catch (e) {}
+      }
+    });
+  });
+  if (ch) {
+    save();
+    if (tab === 'dash') render();
+  }
+}, 30000);
+
+render();
+</script>
+</body>
+</html>
