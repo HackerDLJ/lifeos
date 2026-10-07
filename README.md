@@ -1,5 +1,5 @@
 # Life OS: Python backend + Gemini Live
-
+## Entire App made with Claudecode and Wisperflow
 ```bash
 cd lifeos
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
